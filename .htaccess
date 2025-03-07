@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    # Force HTTPS
+    RewriteEngine On
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+    # Redirect all requests to index.php except allowed static files
+    RewriteBase /
+    RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ttf|eot|ico)$ [NC]
+    RewriteRule ^(.*)$ /index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Prevent loading in an iframe
+    Header always set X-Frame-Options "DENY"
+</IfModule>
